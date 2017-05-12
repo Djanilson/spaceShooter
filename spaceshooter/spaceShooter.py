@@ -32,7 +32,7 @@ POWERUP_TIME = 5000
 BAR_LENGTH = 100
 BAR_HEIGHT = 10
 
-# Define Colors 
+# Define Colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
@@ -84,12 +84,12 @@ def main_menu():
     screen.fill(BLACK)
     draw_text(screen, "GET READY!", 40, WIDTH/2, HEIGHT/2)
     pygame.display.update()
-    
+
 
 def draw_text(surf, text, size, x, y):
     ## selecting a cross platform font to display the score
     font = pygame.font.Font(font_name, size)
-    text_surface = font.render(text, True, WHITE)       ## True denotes the font to be anti-aliased 
+    text_surface = font.render(text, True, WHITE)       ## True denotes the font to be anti-aliased
     text_rect = text_surface.get_rect()
     text_rect.midtop = (x, y)
     surf.blit(text_surface, text_rect)
@@ -98,7 +98,7 @@ def draw_text(surf, text, size, x, y):
 def draw_shield_bar(surf, x, y, pct):
     # if pct < 0:
     #     pct = 0
-    pct = max(pct, 0) 
+    pct = max(pct, 0)
     ## moving them to top
     # BAR_LENGTH = 100
     # BAR_HEIGHT = 10
@@ -130,7 +130,7 @@ class Explosion(pygame.sprite.Sprite):
         self.image = explosion_anim[self.size][0]
         self.rect = self.image.get_rect()
         self.rect.center = center
-        self.frame = 0 
+        self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 75
 
@@ -158,7 +158,7 @@ class Player(pygame.sprite.Sprite):
         self.radius = 20
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
-        self.speedx = 0 
+        self.speedx = 0
         self.shield = 100
         self.shoot_delay = 250
         self.last_shot = pygame.time.get_ticks()
@@ -174,18 +174,18 @@ class Player(pygame.sprite.Sprite):
             self.power -= 1
             self.power_time = pygame.time.get_ticks()
 
-        ## unhide 
+        ## unhide
         if self.hidden and pygame.time.get_ticks() - self.hide_timer > 1000:
             self.hidden = False
             self.rect.centerx = WIDTH / 2
             self.rect.bottom = HEIGHT - 30
 
-        self.speedx = 0     ## makes the player static in the screen by default. 
-        # then we have to check whether there is an event hanlding being done for the arrow keys being 
-        ## pressed 
+        self.speedx = 0     ## makes the player static in the screen by default.
+        # then we have to check whether there is an event hanlding being done for the arrow keys being
+        ## pressed
 
         ## will give back a list of the keys which happen to be pressed down at that moment
-        keystate = pygame.key.get_pressed()     
+        keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
             self.speedx = -5
         elif keystate[pygame.K_RIGHT]:
@@ -259,19 +259,19 @@ class Mob(pygame.sprite.Sprite):
         self.rect.y = random.randrange(-150, -100)
         self.speedy = random.randrange(5, 20)        ## for randomizing the speed of the Mob
 
-        ## randomize the movements a little more 
+        ## randomize the movements a little more
         self.speedx = random.randrange(-3, 3)
 
         ## adding rotation to the mob element
         self.rotation = 0
         self.rotation_speed = random.randrange(-8, 8)
         self.last_update = pygame.time.get_ticks()  ## time when the rotation has to happen
-        
+
     def rotate(self):
         time_now = pygame.time.get_ticks()
         if time_now - self.last_update > 50: # in milliseconds
             self.last_update = time_now
-            self.rotation = (self.rotation + self.rotation_speed) % 360 
+            self.rotation = (self.rotation + self.rotation_speed) % 360
             new_image = pygame.transform.rotate(self.image_orig, self.rotation)
             old_center = self.rect.center
             self.image = new_image
@@ -308,7 +308,7 @@ class Pow(pygame.sprite.Sprite):
         if self.rect.top > HEIGHT:
             self.kill()
 
-            
+
 
 ## defines the sprite for bullets
 class Bullet(pygame.sprite.Sprite):
@@ -318,7 +318,7 @@ class Bullet(pygame.sprite.Sprite):
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         ## place the bullet according to the current position of the player
-        self.rect.bottom = y 
+        self.rect.bottom = y
         self.rect.centerx = x
         self.speedy = -10
 
@@ -356,7 +356,7 @@ class Missile(pygame.sprite.Sprite):
 
 background = pygame.image.load(path.join(img_dir, 'starfield.png')).convert()
 background_rect = background.get_rect()
-## ^^ draw this rect first 
+## ^^ draw this rect first
 
 player_img = pygame.image.load(path.join(img_dir, 'playerShip1_orange.png')).convert()
 player_mini_img = pygame.transform.scale(player_img, (25, 19))
@@ -367,8 +367,8 @@ missile_img = pygame.image.load(path.join(img_dir, 'missile.png')).convert_alpha
 meteor_images = []
 meteor_list = [
     'meteorBrown_big1.png',
-    'meteorBrown_big2.png', 
-    'meteorBrown_med1.png', 
+    'meteorBrown_big2.png',
+    'meteorBrown_med1.png',
     'meteorBrown_med3.png',
     'meteorBrown_small1.png',
     'meteorBrown_small2.png',
@@ -443,7 +443,7 @@ powerups = pygame.sprite.Group()
 score = 0
 
 ## TODO: make the game music loop over again and again. play(loops=-1) is not working
-# Error : 
+# Error :
 # TypeError: play() takes no keyword arguments
 #pygame.mixer.music.play()
 
@@ -461,9 +461,9 @@ while running:
         #Play the gameplay music
         pygame.mixer.music.load(path.join(sound_folder, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))
         pygame.mixer.music.play(-1)     ## makes the gameplay sound in an endless loop
-        
+
         menu_display = False
-        
+
     #1 Process input/events
     clock.tick(FPS)     ## will make the loop run at the same speed all the time
     for event in pygame.event.get():        # gets all the events which have occured till now and keeps tab of them.
@@ -474,7 +474,8 @@ while running:
         ## Press ESC to exit game
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_ESCAPE:
-                running = False
+                # running = False
+                main_menu()
         # ## event for shooting the bullets
         # elif event.type == pygame.KEYDOWN:
         #     if event.key == pygame.K_SPACE:
@@ -488,7 +489,7 @@ while running:
     ## now we have a group of bullets and a group of mob
     hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
     ## now as we delete the mob element when we hit one with a bullet, we need to respawn them again
-    ## as there will be no mob_elements left out 
+    ## as there will be no mob_elements left out
     for hit in hits:
         score += 50 - hit.radius         ## give different scores for hitting big and small metoers
         random.choice(expl_sounds).play()
@@ -513,7 +514,7 @@ while running:
         expl = Explosion(hit.rect.center, 'sm')
         all_sprites.add(expl)
         newmob()
-        if player.shield <= 0: 
+        if player.shield <= 0:
             player_die_sound.play()
             death_explosion = Explosion(player.rect.center, 'player')
             all_sprites.add(death_explosion)
@@ -551,6 +552,6 @@ while running:
     draw_lives(screen, WIDTH - 100, 5, player.lives, player_mini_img)
 
     ## Done after drawing everything to the screen
-    pygame.display.flip()       
+    pygame.display.flip()
 
 pygame.quit()
